@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Photobooth - By Duc Anh</title>
+    <style>
+        :root {
+            --primary: #ff9a9e;
+            --secondary: #fecfef;
+            --dark: #2d3436;
+            --light: #ffffff;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --bg-color: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Layout */
+        #app {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .screen.active {
+            display: flex;
+            gap: 20px;
+        }
+
+        .left-panel {
+            flex: 2;
+            position: relative;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right-panel {
+            flex: 1;
+            background: var(--light);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Camera & Video */
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1); /* Mirror */
+        }
+
+        /* UI Overlays */
+        #countdown {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 150px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(0,0,0,0.5);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes pop {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        .anim-pop {
+            animation: pop 1s ease-in-out;
+        }
+
+        #flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 20;
+            transition: opacity 0.1s ease-out;
+        }
+
+        /* Controls */
+        h2 { margin-bottom: 15px; font-size: 1.5rem; text-align: center; }
+        
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        
+        .btn-group { display: flex; gap: 10px; }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #eee;
+            color: #333;
+            flex: 1;
+        }
+
+        button.active, button:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), #fecfef);
+            color: white;
+            font-size: 1.2rem;
+            padding: 15px;
+            width: 100%;
+            margin-top: auto;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.5);
+        }
+        
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; }
+
+        /* Photo List */
+        #photo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .photo-item {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        .photo-item .retake-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            opacity: 0;
+        }
+
+        .photo-item:hover .retake-btn { opacity: 1; }
+
+        /* Edit Screen specific */
+        #edit-canvas-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e9ecef;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        #final-canvas {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            background: white;
+            cursor: grab;
+            max-height: 100%;
+            width: auto;
+        }
+
+        .sticker-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .sticker-btn {
+            font-size: 1.5rem;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+
+        .bg-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        /* Futuristic/Neon style override for backgrounds */
+        .bg-btn[data-bg="neon"] {
+            background: #1a1a2e;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-blue);
+            box-shadow: inset 0 0 10px rgba(255,0,255,0.2);
+        }
+
+        /* Footer info */
+        .watermark-footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .watermark-footer strong { color: var(--primary); }
+
+        #loading {
+            position: absolute;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Utils */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <div id="screen-capture" class="screen active">
+            <div class="left-panel">
+                <div id="loading">Đang tải Camera...</div>
+                <video id="video" autoplay playsinline muted></video>
+                <div id="countdown"></div>
+                <div id="flash"></div>
+            </div>
+            
+            <div class="right-panel">
+                <h2>Cài đặt chụp</h2>
+                
+                <div class="control-group">
+                    <label>Số lượng ảnh:</label>
+                    <div class="btn-group">
+                        <button class="mode-btn active" data-shots="2">2 Ảnh</button>
+                        <button class="mode-btn" data-shots="4">4 Ảnh</button>
+                    </div>
+                </div>
+
+                <label>Ảnh đã chụp:</label>
+                <div id="photo-list">
+                    </div>
+
+                <button id="btn-start-capture" class="btn-primary">Bắt đầu chụp</button>
+                <button id="btn-continue" class="btn-primary hidden" style="background: #2ecc71;">Tiếp tục chỉnh sửa</button>
+            </div>
+        </div>
+
+        <div id="screen-edit" class="screen">
+            <div class="left-panel" id="edit-canvas-container">
+                <canvas id="final-canvas"></canvas>
+            </div>
+            
+            <div class="right-panel">
+                <h2>Chỉnh sửa & Trang trí</h2>
+                
+                <div class="control-group">
+                    <label>Khung nền (Background):</label>
+                    <div class="bg-grid">
+                        <button class="bg-btn active" data-bg="pastel">Pastel Hàn Quốc</button>
+                        <button class="bg-btn" data-bg="neon">Neon Tương lai</button>
+                        <button class="bg-btn" data-bg="vintage">Vintage</button>
+                        <button class="bg-btn" data-bg="anime">Anime Sky</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Stickers (Click để thêm):</label>
+                    <div class="sticker-grid">
+                        <button class="sticker-btn" data-type="emoji" data-val="💖">💖</button>
+                        <button class="sticker-btn" data-type="emoji" data-val="✨">✨</button>
+                        <button class="sticker-btn" data-type="emoji" data-val="🌸">🌸</button>
+                        <button class="sticker-btn" data-type="emoji" data-val="⚡️">⚡️</button>
+                        <button class="sticker-btn" data-type="emoji" data-val="👑">👑</button>
+                        <button class="sticker-btn" data-type="emoji" data-val="😎">😎</button>
+                        <button class="sticker-btn" data-type="text" data-val="LOVE" style="font-size: 1rem; font-weight:bold;">LOVE</button>
+                        <button class="sticker-btn" data-type="text" data-val="COOL" style="font-size: 1rem; font-weight:bold;">COOL</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: auto; display: flex; gap: 10px;">
+                    <button id="btn-back-capture" style="flex: 0.5;">Chụp lại toàn bộ</button>
+                    <button id="btn-download" class="btn-primary" style="margin: 0; flex: 1;">Tải ảnh về 📥</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="capture-canvas" class="hidden"></canvas>
+
+    <div class="watermark-footer">
+        Code web by <strong>ducanh</strong> | Donate: <strong>0915779767 (MB BANK)</strong>
+    </div>
+
+    <script>
+        /**
+         * APPLICATION STATE
+         */
+        const state = {
+            totalShots: 2,
+            photos: [], // Array of base64 image strings
+            isCapturing: false,
+            stream: null,
+            audioCtx: null,
+            // Edit state
+            backgroundType: 'pastel',
+            stickers: [], // {id, text, x, y, size, isDragging}
+            dragTarget: null,
+            dragOffset: {x: 0, y: 0}
+        };
+
+        /**
+         * DOM ELEMENTS
+         */
+        const video = document.getElementById('video');
+        const countdownEl = document.getElementById('countdown');
+        const flashEl = document.getElementById('flash');
+        const photoListEl = document.getElementById('photo-list');
+        const startCaptureBtn = document.getElementById('btn-start-capture');
+        const continueBtn = document.getElementById('btn-continue');
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        const captureCanvas = document.getElementById('capture-canvas');
+        const captureCtx = captureCanvas.getContext('2d');
+        const loadingEl = document.getElementById('loading');
+
+        // Edit Elements
+        const screenCapture = document.getElementById('screen-capture');
+        const screenEdit = document.getElementById('screen-edit');
+        const finalCanvas = document.getElementById('final-canvas');
+        const finalCtx = finalCanvas.getContext('2d');
+        const bgBtns = document.querySelectorAll('.bg-btn');
+        const stickerBtns = document.querySelectorAll('.sticker-btn');
+        const downloadBtn = document.getElementById('btn-download');
+        const backCaptureBtn = document.getElementById('btn-back-capture');
+
+        /**
+         * CAMERA INIT
+         */
+        async function initCamera() {
+            try {
+                state.stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" } 
+                });
+                video.srcObject = state.stream;
+                video.onloadedmetadata = () => {
+                    loadingEl.style.display = 'none';
+                    // Set capture canvas resolution to match video
+                    captureCanvas.width = video.videoWidth;
+                    captureCanvas.height = video.videoHeight;
+                };
+            } catch (err) {
+                loadingEl.innerText = "Lỗi: Không thể truy cập Camera. Vui lòng cấp quyền.";
+                console.error("Camera error:", err);
+            }
+        }
+
+        /**
+         * AUDIO EFFECTS
+         */
+        function playShutterSound() {
+            if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = state.audioCtx.createOscillator();
+            const gainNode = state.audioCtx.createGain();
+            
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(150, state.audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(0.01, state.audioCtx.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.5, state.audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, state.audioCtx.currentTime + 0.1);
+            
+            osc.connect(gainNode);
+            gainNode.connect(state.audioCtx.destination);
+            
+            osc.start();
+            osc.stop(state.audioCtx.currentTime + 0.1);
+        }
+
+        /**
+         * CAPTURE LOGIC
+         */
+        function initEmptyPhotos() {
+            state.photos = new Array(state.totalShots).fill(null);
+            renderPhotoList();
+        }
+
+        function renderPhotoList() {
+            photoListEl.innerHTML = '';
+            state.photos.forEach((photoData, index) => {
+                const div = document.createElement('div');
+                div.className = 'photo-item';
+                div.innerHTML = photoData 
+                    ? `<img src="${photoData}" alt="Shot ${index + 1}">
+                       <button class="retake-btn" onclick="triggerRetake(${index})">Chụp lại</button>`
+                    : `<span style="color: #ccc; font-size: 2rem;">${index + 1}</span>`;
+                photoListEl.appendChild(div);
+            });
+
+            // Check if all filled to show continue button
+            const allFilled = state.photos.every(p => p !== null);
+            if (allFilled && !state.isCapturing) {
+                startCaptureBtn.classList.add('hidden');
+                continueBtn.classList.remove('hidden');
+            } else {
+                startCaptureBtn.classList.remove('hidden');
+                continueBtn.classList.add('hidden');
+            }
+        }
+
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        async function runCountdown() {
+            countdownEl.style.opacity = 1;
+            for (let i = 3; i > 0; i--) {
+                countdownEl.innerText = i;
+                countdownEl.classList.remove('anim-pop');
+                void countdownEl.offsetWidth; // Trigger reflow
+                countdownEl.classList.add('anim-pop');
+                await sleep(1000);
+            }
+            countdownEl.style.opacity = 0;
+        }
+
+        function triggerFlash() {
+            flashEl.style.opacity = 1;
+            setTimeout(() => { flashEl.style.opacity = 0; }, 150);
+        }
+
+        function captureFrame() {
+            // Draw video to canvas (mirrored)
+            captureCtx.save();
+            captureCtx.scale(-1, 1);
+            captureCtx.drawImage(video, -captureCanvas.width, 0, captureCanvas.width, captureCanvas.height);
+            captureCtx.restore();
+            return captureCanvas.toDataURL('image/png');
+        }
+
+        async function takeSingleShot(index) {
+            await runCountdown();
+            playShutterSound();
+            triggerFlash();
+            const imgData = captureFrame();
+            state.photos[index] = imgData;
+            renderPhotoList();
+        }
+
+        async function startCaptureSequence() {
+            if (state.isCapturing) return;
+            state.isCapturing = true;
+            startCaptureBtn.disabled = true;
+            
+            // Re-init audio context on user interaction
+            if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            for (let i = 0; i < state.totalShots; i++) {
+                if (!state.photos[i]) {
+                    await takeSingleShot(i);
+                    // Đợi 4 giây trước khi chụp ảnh tiếp theo (nếu không phải ảnh cuối)
+                    if (i < state.totalShots - 1) {
+                        await sleep(4000);
+                    }
+                }
+            }
+
+            state.isCapturing = false;
+            startCaptureBtn.disabled = false;
+            renderPhotoList();
+        }
+
+        window.triggerRetake = async function(index) {
+            if (state.isCapturing) return;
+            state.isCapturing = true;
+            startCaptureBtn.disabled = true;
+            
+            await takeSingleShot(index);
+            
+            state.isCapturing = false;
+            startCaptureBtn.disabled = false;
+            renderPhotoList();
+        };
+
+        /**
+         * EDITING & CANVAS RENDER LOGIC
+         */
+        const STRIP_WIDTH = 600;
+        const PADDING = 30;
+        const PHOTO_WIDTH = STRIP_WIDTH - (PADDING * 2);
+        const PHOTO_ASPECT = 4 / 3;
+        const PHOTO_HEIGHT = PHOTO_WIDTH / PHOTO_ASPECT;
+        
+        function setupCanvasSize() {
+            // Header + (photos + padding) + Footer
+            const contentHeight = (PHOTO_HEIGHT + PADDING) * state.totalShots;
+            const stripHeight = PADDING + contentHeight + 120; // 120px cho footer/watermark
+            
+            finalCanvas.width = STRIP_WIDTH;
+            finalCanvas.height = stripHeight;
+        }
+
+        function drawBackground() {
+            const w = finalCanvas.width;
+            const h = finalCanvas.height;
+            
+            if (state.backgroundType === 'pastel') {
+                const grd = finalCtx.createLinearGradient(0, 0, w, h);
+                grd.addColorStop(0, "#ffdde1");
+                grd.addColorStop(1, "#ee9ca7");
+                finalCtx.fillStyle = grd;
+                finalCtx.fillRect(0, 0, w, h);
+            } else if (state.backgroundType === 'neon') {
+                finalCtx.fillStyle = "#1a1a2e";
+                finalCtx.fillRect(0, 0, w, h);
+                // Grid effect
+                finalCtx.strokeStyle = "rgba(0, 243, 255, 0.2)";
+                finalCtx.lineWidth = 2;
+                for(let i=0; i<w; i+=40) { finalCtx.beginPath(); finalCtx.moveTo(i,0); finalCtx.lineTo(i,h); finalCtx.stroke(); }
+                for(let i=0; i<h; i+=40) { finalCtx.beginPath(); finalCtx.moveTo(0,i); finalCtx.lineTo(w,i); finalCtx.stroke(); }
+                // Border glow
+                finalCtx.strokeStyle = "#ff00ff";
+                finalCtx.lineWidth = 10;
+                finalCtx.strokeRect(5, 5, w-10, h-10);
+            } else if (state.backgroundType === 'vintage') {
+                const grd = finalCtx.createLinearGradient(0, 0, w, h);
+                grd.addColorStop(0, "#d4c3b3");
+                grd.addColorStop(1, "#8e7c68");
+                finalCtx.fillStyle = grd;
+                finalCtx.fillRect(0, 0, w, h);
+            } else if (state.backgroundType === 'anime') {
+                const grd = finalCtx.createLinearGradient(0, 0, 0, h);
+                grd.addColorStop(0, "#87CEEB"); // Sky blue
+                grd.addColorStop(1, "#E0F6FF");
+                finalCtx.fillStyle = grd;
+                finalCtx.fillRect(0, 0, w, h);
+                // Draw simple clouds
+                finalCtx.fillStyle = "rgba(255,255,255,0.8)";
+                finalCtx.beginPath(); finalCtx.arc(100, 100, 40, 0, Math.PI*2); finalCtx.fill();
+                finalCtx.beginPath(); finalCtx.arc(140, 100, 50, 0, Math.PI*2); finalCtx.fill();
+                finalCtx.beginPath(); finalCtx.arc(180, 100, 40, 0, Math.PI*2); finalCtx.fill();
+                finalCtx.beginPath(); finalCtx.arc(450, 200, 40, 0, Math.PI*2); finalCtx.fill();
+                finalCtx.beginPath(); finalCtx.arc(500, 200, 60, 0, Math.PI*2); finalCtx.fill();
+                finalCtx.beginPath(); finalCtx.arc(560, 200, 40, 0, Math.PI*2); finalCtx.fill();
+            }
+        }
+
+        async function renderEditCanvas() {
+            drawBackground();
+
+            // Draw Photos
+            for (let i = 0; i < state.photos.length; i++) {
+                const yPos = PADDING + i * (PHOTO_HEIGHT + PADDING);
+                
+                if (state.photos[i]) {
+                    const img = new Image();
+                    img.src = state.photos[i];
+                    await new Promise(r => { img.onload = r; });
+                    
+                    // Draw photo background/border
+                    finalCtx.fillStyle = "#fff";
+                    finalCtx.shadowColor = "rgba(0,0,0,0.2)";
+                    finalCtx.shadowBlur = 10;
+                    finalCtx.shadowOffsetX = 2;
+                    finalCtx.shadowOffsetY = 2;
+                    finalCtx.fillRect(PADDING - 5, yPos - 5, PHOTO_WIDTH + 10, PHOTO_HEIGHT + 10);
+                    
+                    // Reset shadow for image
+                    finalCtx.shadowColor = "transparent";
+                    
+                    // Center crop image to fit PHOTO_WIDTH / PHOTO_HEIGHT
+                    const scale = Math.max(PHOTO_WIDTH / img.width, PHOTO_HEIGHT / img.height);
+                    const drawW = img.width * scale;
+                    const drawH = img.height * scale;
+                    const drawX = PADDING + (PHOTO_WIDTH - drawW) / 2;
+                    const drawY = yPos + (PHOTO_HEIGHT - drawH) / 2;
+                    
+                    // Clip area
+                    finalCtx.save();
+                    finalCtx.beginPath();
+                    finalCtx.rect(PADDING, yPos, PHOTO_WIDTH, PHOTO_HEIGHT);
+                    finalCtx.clip();
+                    finalCtx.drawImage(img, drawX, drawY, drawW, drawH);
+                    
+                    // Apply subtle filter based on bg
+                    if(state.backgroundType === 'vintage') {
+                        finalCtx.fillStyle = "rgba(100, 50, 0, 0.2)";
+                        finalCtx.fillRect(PADDING, yPos, PHOTO_WIDTH, PHOTO_HEIGHT);
+                    }
+                    finalCtx.restore();
+                }
+            }
+
+            // Draw Watermark at bottom
+            finalCtx.fillStyle = state.backgroundType === 'neon' ? "#00f3ff" : "#333";
+            finalCtx.font = "bold 24px 'Segoe UI', sans-serif";
+            finalCtx.textAlign = "center";
+            finalCtx.shadowColor = "transparent";
+            const footerY = finalCanvas.height - 50;
+            finalCtx.fillText("code web by ducanh", STRIP_WIDTH / 2, footerY);
+            finalCtx.font = "18px 'Segoe UI', sans-serif";
+            finalCtx.fillText("Donate: 0915779767 (MB BANK)", STRIP_WIDTH / 2, footerY + 30);
+
+            // Draw Stickers
+            state.stickers.forEach(st => {
+                finalCtx.font = `${st.size}px Arial`;
+                finalCtx.textAlign = "center";
+                finalCtx.textBaseline = "middle";
+                
+                if (state.backgroundType === 'neon' && st.type === 'text') {
+                    finalCtx.shadowColor = "#ff00ff";
+                    finalCtx.shadowBlur = 15;
+                    finalCtx.fillStyle = "#fff";
+                } else {
+                    finalCtx.shadowBlur = 0;
+                    finalCtx.fillStyle = "#000";
+                }
+                
+                finalCtx.fillText(st.text, st.x, st.y);
+            });
+            finalCtx.shadowBlur = 0; // reset
+        }
+
+        /**
+         * STICKER DRAG & DROP LOGIC
+         */
+        function getMousePos(evt) {
+            const rect = finalCanvas.getBoundingClientRect();
+            const scaleX = finalCanvas.width / rect.width;
+            const scaleY = finalCanvas.height / rect.height;
+            return {
+                x: (evt.clientX - rect.left) * scaleX,
+                y: (evt.clientY - rect.top) * scaleY
+            };
+        }
+
+        finalCanvas.addEventListener('mousedown', (e) => {
+            const pos = getMousePos(e);
+            // Find clicked sticker (reverse order for top-most)
+            for (let i = state.stickers.length - 1; i >= 0; i--) {
+                const st = state.stickers[i];
+                // Approximate hit box based on font size
+                finalCtx.font = `${st.size}px Arial`;
+                const metrics = finalCtx.measureText(st.text);
+                const w = metrics.width;
+                const h = st.size; 
+                
+                if (pos.x >= st.x - w/2 && pos.x <= st.x + w/2 &&
+                    pos.y >= st.y - h/2 && pos.y <= st.y + h/2) {
+                    state.dragTarget = st;
+                    state.dragOffset.x = pos.x - st.x;
+                    state.dragOffset.y = pos.y - st.y;
+                    finalCanvas.style.cursor = 'grabbing';
+                    return;
+                }
+            }
+        });
+
+        finalCanvas.addEventListener('mousemove', (e) => {
+            if (state.dragTarget) {
+                const pos = getMousePos(e);
+                state.dragTarget.x = pos.x - state.dragOffset.x;
+                state.dragTarget.y = pos.y - state.dragOffset.y;
+                renderEditCanvas();
+            }
+        });
+
+        finalCanvas.addEventListener('mouseup', () => {
+            state.dragTarget = null;
+            finalCanvas.style.cursor = 'grab';
+        });
+        finalCanvas.addEventListener('mouseleave', () => {
+            state.dragTarget = null;
+            finalCanvas.style.cursor = 'grab';
+        });
+
+        /**
+         * EVENT LISTENERS
+         */
+        // Select Shots
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if(state.isCapturing) return;
+                modeBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                state.totalShots = parseInt(e.target.dataset.shots);
+                initEmptyPhotos();
+            });
+        });
+
+        // Start Capture
+        startCaptureBtn.addEventListener('click', startCaptureSequence);
+
+        // Continue to Edit
+        continueBtn.addEventListener('click', () => {
+            screenCapture.classList.remove('active');
+            screenEdit.classList.add('active');
+            setupCanvasSize();
+            state.stickers = []; // Reset stickers
+            renderEditCanvas();
+        });
+
+        // Back to Capture
+        backCaptureBtn.addEventListener('click', () => {
+            if(confirm("Toàn bộ ảnh sẽ bị xóa. Bạn có chắc muốn chụp lại?")) {
+                screenEdit.classList.remove('active');
+                screenCapture.classList.add('active');
+                initEmptyPhotos();
+            }
+        });
+
+        // Select Background
+        bgBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                bgBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                state.backgroundType = e.target.dataset.bg;
+                renderEditCanvas();
+            });
+        });
+
+        // Add Sticker
+        stickerBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const val = e.target.dataset.val;
+                const type = e.target.dataset.type;
+                state.stickers.push({
+                    id: Date.now(),
+                    text: val,
+                    type: type,
+                    x: STRIP_WIDTH / 2,
+                    y: finalCanvas.height / 2,
+                    size: type === 'text' ? 60 : 80
+                });
+                renderEditCanvas();
+            });
+        });
+
+        // Download
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = `photobooth_ducanh_${Date.now()}.png`;
+            link.href = finalCanvas.toDataURL('image/png');
+            link.click();
+        });
+
+        /**
+         * STARTUP
+         */
+        initEmptyPhotos();
+        initCamera();
+
+    </script>
+</body>
+</html>
