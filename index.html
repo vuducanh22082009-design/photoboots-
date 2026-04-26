@@ -63,7 +63,7 @@
 
         /* header */
         #header {
-            padding: 10px 16px;
+            padding: 14px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -72,47 +72,23 @@
             border-bottom: 1px solid var(--border);
             z-index: 20;
             flex-shrink: 0;
-            gap: 8px;
         }
         .logo {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
-        .header-actions {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-        .btn-icon-sm {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: var(--shadow-sm);
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-            backdrop-filter: blur(4px);
-        }
-        .btn-icon-sm:active {
-            transform: scale(0.9);
-            background: #f0eaff;
-        }
-        /* Donate animation */
         .donate-badge {
-            font-size: 0.6rem;
-            background: rgba(139, 92, 246, 0.15);
+            font-size: 0.65rem;
+            background: rgba(139, 92, 246, 0.1);
             color: var(--primary);
-            padding: 4px 8px;
-            border-radius: 12px;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
             white-space: nowrap;
             animation: gentlePulse 2s infinite;
             box-shadow: 0 0 8px rgba(139, 92, 246, 0.2);
@@ -140,7 +116,7 @@
             border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
         video,
-        #preview-canvas {
+        canvas {
             position: absolute;
             inset: 0;
             width: 100%;
@@ -230,8 +206,13 @@
             background: rgba(255, 255, 255, 0.35);
             transition: 0.3s;
         }
-        .dot.done { background: #fff; }
-        .dot.current { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+        .dot.done {
+            background: #fff;
+        }
+        .dot.current {
+            background: var(--accent);
+            box-shadow: 0 0 12px var(--accent);
+        }
 
         /* sidebar */
         #photo-sidebar {
@@ -266,131 +247,426 @@
             position: relative;
             background: #1e1b2e;
         }
-        .sidebar-thumb:hover { transform: scale(1.03); border-color: var(--accent); }
-        .sidebar-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .sidebar-thumb:hover {
+            transform: scale(1.03);
+            border-color: var(--accent);
+        }
+        .sidebar-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .sidebar-thumb .retake-icon {
             position: absolute;
-            bottom: 2px; right: 2px;
+            bottom: 2px;
+            right: 2px;
             background: rgba(0, 0, 0, 0.7);
             color: #fff;
             border-radius: 50%;
-            width: 20px; height: 20px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 11px; cursor: pointer; backdrop-filter: blur(4px);
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
         }
 
-        /* bottom nav */
-        #bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.85);
+        /* controls (GIỮ NGUYÊN GIAO DIỆN CŨ) */
+        #controls {
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
-            padding: 6px 0 calc(6px + var(--safe-bottom));
-            border-top: 1px solid var(--border);
-            z-index: 25;
+            padding: 16px 16px calc(16px + var(--safe-bottom));
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 10;
             flex-shrink: 0;
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.02);
+        }
+        .row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button {
+            border: none;
+            cursor: pointer;
+            font-family: var(--font);
+            font-weight: 600;
+            transition: all 0.2s;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            padding: 8px 14px;
+            background: #f4f2ff;
+            color: var(--text);
+            box-shadow: var(--shadow-sm);
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
             gap: 4px;
+            justify-content: center;
         }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; padding: 6px 12px; border-radius: 20px;
-            transition: 0.2s; font-size: 0.7rem; font-weight: 600;
-            color: var(--text-light); gap: 2px; border: 2px solid transparent;
+        button:active {
+            transform: scale(0.95);
         }
-        .nav-item.active { color: var(--primary); background: #f5f3ff; border-color: var(--primary-soft); }
-        .nav-item span { font-size: 1.2rem; }
+        .btn-main {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            color: #fff;
+            padding: 14px 40px;
+            font-size: 1rem;
+            border-radius: 30px;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+            letter-spacing: 0.5px;
+        }
+        .btn-outline {
+            background: #fff;
+            border: 2px solid #e9e8f5;
+            color: var(--text);
+            box-shadow: none;
+        }
+        .btn-outline.active {
+            border-color: var(--primary-soft);
+            background: #f5f3ff;
+            color: var(--primary);
+        }
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            padding: 0;
+            font-size: 1.2rem;
+            background: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+        select {
+            border: 2px solid #e9e8f5;
+            border-radius: 16px;
+            padding: 6px 12px;
+            font-family: var(--font);
+            font-weight: 500;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
 
         /* panels */
         .panel {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
-            border-radius: 24px 24px 0 0; z-index: 25;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px 24px 0 0;
+            z-index: 25;
             padding: 20px 16px calc(20px + var(--safe-bottom));
             box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.08);
             transform: translateY(105%);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            max-height: 60vh; overflow-y: auto;
+            max-height: 60vh;
+            overflow-y: auto;
         }
-        .panel.open { transform: translateY(0); }
-        .panel h3 { font-size: 1rem; margin-bottom: 12px; color: var(--text); }
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .grid.small { grid-template-columns: repeat(5, 1fr); }
+        .panel.open {
+            transform: translateY(0);
+        }
+        .panel h3 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .grid.small {
+            grid-template-columns: repeat(5, 1fr);
+        }
         .grid-item {
-            aspect-ratio: 1; border-radius: var(--radius-sm); cursor: pointer;
-            border: 3px solid transparent; transition: 0.2s; background-size: cover;
-            background-position: center; position: relative; overflow: hidden;
-            background-color: #f4f2ff; display: flex; align-items: center; justify-content: center; font-weight: 600;
+            aspect-ratio: 1;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            background-color: #f4f2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
         }
-        .grid-item.selected { border-color: var(--primary-soft); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); }
+        .grid-item.selected {
+            border-color: var(--primary-soft);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+        }
         .grid-item .check {
-            position: absolute; top: 4px; right: 4px; background: var(--primary); color: #fff;
-            border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
-            font-size: 0.6rem; opacity: 0; transition: opacity 0.2s;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            opacity: 0;
+            transition: opacity 0.2s;
         }
-        .grid-item.selected .check { opacity: 1; }
+        .grid-item.selected .check {
+            opacity: 1;
+        }
 
         /* frame grid */
-        #frame-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .frame-thumb {
-            aspect-ratio: 9/16; border-radius: 10px; cursor: pointer;
-            border: 3px solid transparent; transition: all 0.2s; position: relative;
-            overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        #frame-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
-        .frame-thumb.selected { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2); }
+        .frame-thumb {
+            aspect-ratio: 9/16;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        .frame-thumb.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+        }
 
         /* result modal */
         #result-modal {
-            position: fixed; inset: 0; z-index: 50; background: rgba(30, 27, 46, 0.85);
-            display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none;
-            transition: opacity 0.3s; flex-direction: column; gap: 16px; padding: 20px;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: rgba(30, 27, 46, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            flex-direction: column;
+            gap: 16px;
+            padding: 20px;
         }
-        #result-modal.open { opacity: 1; pointer-events: auto; }
+        #result-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
         #result-modal img {
-            max-width: 90vw; max-height: 55vh; border-radius: 18px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); animation: slideUp 0.4s ease-out;
+            max-width: 90vw;
+            max-height: 55vh;
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.4s ease-out;
         }
         @keyframes slideUp {
             from { transform: translateY(40px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        #result-modal .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-        #result-modal button { border: none; padding: 12px 22px; border-radius: 25px; cursor: pointer; font-weight: 600; font-family: var(--font); font-size: 0.9rem; }
-        .btn-download { background: var(--primary); color: #fff; }
-        .btn-retake { background: #fff; color: var(--text); }
-        .btn-close { background: transparent; color: #fff; border: 2px solid rgba(255, 255, 255, 0.4); }
+        #result-modal .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #result-modal button {
+            border: none;
+            padding: 12px 22px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: var(--font);
+            font-size: 0.9rem;
+        }
+        .btn-download {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-retake {
+            background: #fff;
+            color: var(--text);
+        }
+        .btn-close {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* history panel */
+        #history-panel {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px 24px 0 0;
+            z-index: 30;
+            padding: 20px 16px calc(20px + var(--safe-bottom));
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.08);
+            transform: translateY(105%);
+            transition: transform 0.35s;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        #history-panel.open {
+            transform: translateY(0);
+        }
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .history-item {
+            aspect-ratio: 3/4;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: #f4f2ff;
+            border: 2px solid transparent;
+        }
+        .history-item:hover {
+            border-color: var(--primary-soft);
+        }
+        .history-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .history-item .del-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(239, 68, 68, 0.9);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         #overlay-backdrop {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 22;
-            opacity: 0; pointer-events: none; transition: 0.3s;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 22;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
         }
-        #overlay-backdrop.show { opacity: 1; pointer-events: auto; }
+        #overlay-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         #toast {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120px);
-            background: #4a4a6a; color: #fff; padding: 12px 24px; border-radius: 25px; z-index: 99;
-            font-weight: 500; font-size: 0.85rem; transition: transform 0.35s; pointer-events: none; white-space: nowrap; backdrop-filter: blur(8px);
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: #4a4a6a;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            z-index: 99;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: transform 0.35s;
+            pointer-events: none;
+            white-space: nowrap;
+            backdrop-filter: blur(8px);
         }
-        #toast.show { transform: translateX(-50%) translateY(0); }
-        .sticker-on-photo, .text-on-photo {
-            position: absolute; cursor: grab; z-index: 9; pointer-events: auto;
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .sticker-on-photo,
+        .text-on-photo {
+            position: absolute;
+            cursor: grab;
+            z-index: 9;
+            pointer-events: auto;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
         .delete-sticker {
-            position: absolute; top: -12px; right: -12px; background: #ef4444; color: #fff;
-            border-radius: 50%; width: 20px; height: 20px; font-size: 0.6rem;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid #fff; z-index: 2;
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #ef4444;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid #fff;
+            z-index: 2;
+        }
+
+        /* Header icons (giữ nguyên) */
+        .header-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .btn-icon-sm {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .btn-icon-sm:active {
+            transform: scale(0.9);
+            background: #f0eaff;
         }
     </style>
 </head>
 <body>
     <div id="app">
-        <!-- Header -->
+        <!-- Header (GIỮ NGUYÊN) -->
         <div id="header">
             <div class="logo"><span>📷</span> Góc Kỷ Niệm</div>
             <div class="header-actions">
                 <button class="btn-icon-sm" id="btn-toggle-fx" title="Hiệu ứng nền">🌈</button>
                 <button class="btn-icon-sm" id="btn-flip-camera" title="Lật camera">🔄</button>
-                <button class="btn-icon-sm" id="btn-self-timer" title="Hẹn giờ">⏲️</button>
                 <span class="donate-badge">💜 donate: 0915779767 (MB BANK)</span>
             </div>
         </div>
@@ -414,52 +690,48 @@
             <div id="photo-sidebar"></div>
         </div>
 
-        <!-- Bottom Navigation -->
-        <div id="bottom-nav">
-            <div class="nav-item active" data-panel="capture-panel"><span>📸</span> Chụp</div>
-            <div class="nav-item" data-panel="decor-panel"><span>🎨</span> Trang trí</div>
-            <div class="nav-item" data-panel="frame-panel"><span>🎀</span> Khung</div>
-            <div class="nav-item" data-panel="history-panel"><span>🖼️</span> Lịch sử</div>
-        </div>
-
-        <!-- Panels -->
-        <div class="panel open" id="capture-panel">
-            <h3>📸 Cài đặt chụp</h3>
-            <div style="display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;">
-                <select id="countdown-select" style="flex:1;min-width:100px;">
-                    <option value="3" selected>⏱ 3s đếm ngược</option>
-                    <option value="5">5s</option>
-                    <option value="10">10s</option>
+        <!-- Controls (GIỮ NGUYÊN GIAO DIỆN CŨ) -->
+        <div id="controls">
+            <div class="row" style="justify-content: space-between; font-weight: 600; color: var(--text-light); font-size: 0.8rem;">
+                <span>🎀 Khung pastel</span>
+                <span>⏱ Đếm ngược</span>
+            </div>
+            <div class="row">
+                <button class="btn-outline" id="btn-frame-select">🎀 Chọn khung</button>
+                <select id="countdown-select">
+                    <option value="3" selected>3 giây</option>
+                    <option value="5">5 giây</option>
+                    <option value="10">10 giây</option>
                 </select>
+            </div>
+            <div class="row" style="margin-top: 4px;">
                 <button class="btn-icon" id="btn-beauty" title="Làm đẹp">💖</button>
                 <button class="btn-main" id="btn-capture">📸 CHỤP</button>
+                <button class="btn-icon" id="btn-history">🖼️</button>
             </div>
-            <p style="text-align:center;font-size:0.7rem;margin-top:8px;color:var(--text-light);">Chọn khung ở tab 🎀 trước khi chụp</p>
-        </div>
-
-        <div class="panel" id="decor-panel">
-            <h3>🎨 Trang trí ảnh</h3>
-            <div class="row" style="gap:6px;margin-bottom:12px;">
+            <div class="row" style="gap:6px;">
                 <button class="btn-outline btn-sm" id="btn-backgrounds">🎨 Nền</button>
                 <button class="btn-outline btn-sm" id="btn-stickers">⭐ Sticker</button>
                 <button class="btn-outline btn-sm" id="btn-text">✏️ Chữ</button>
                 <button class="btn-outline btn-sm" id="btn-filters">🔮 Filter</button>
             </div>
-            <div id="decor-sub-panel"></div>
         </div>
 
-        <!-- Sub panels -->
+        <!-- Panels -->
         <div class="panel" id="bg-panel">
-            <h3>🎨 Chọn nền</h3>
+            <h3>🎨 Chọn nền Korean-style</h3>
             <div class="grid" id="bg-grid"></div>
-            <label style="display:block;text-align:center;margin-top:12px;cursor:pointer;color:var(--primary);">📁 Tải nền <input type="file" accept="image/*" id="custom-bg-input" style="display:none;"></label>
+            <label style="display:block;text-align:center;margin-top:12px;cursor:pointer;color:var(--primary);font-weight:500;">
+                📁 Tải nền của bạn
+                <input type="file" accept="image/*" id="custom-bg-input" style="display:none;">
+            </label>
         </div>
         <div class="panel" id="sticker-panel">
-            <h3>⭐ Sticker</h3>
+            <h3>⭐ Sticker yêu thích</h3>
             <div class="grid small" id="sticker-grid"></div>
         </div>
         <div class="panel" id="text-panel">
-            <h3>✏️ Thêm chữ</h3>
+            <h3>✏️ Thêm chữ vào ảnh</h3>
             <input type="text" id="text-input" placeholder="Nhập chữ..." style="width:100%;padding:10px;border-radius:20px;border:2px solid #e9e8f5;margin-bottom:8px;">
             <div class="row">
                 <input type="color" id="text-color" value="#8b5cf6" style="width:40px;height:40px;border:none;border-radius:50%;">
@@ -468,17 +740,16 @@
             </div>
         </div>
         <div class="panel" id="filter-panel">
-            <h3>🔮 Bộ lọc</h3>
+            <h3>🔮 Bộ lọc máy ảnh</h3>
             <div class="grid" id="filter-grid"></div>
-            <button style="margin-top:8px;width:100%;" id="btn-reset-filter">🔄 Reset</button>
+            <button style="margin-top:8px;width:100%;" id="btn-reset-filter">🔄 Reset bộ lọc</button>
         </div>
-
         <div class="panel" id="frame-panel">
             <h3>🎀 Chọn khung pastel (30 mẫu)</h3>
             <div id="frame-grid"></div>
         </div>
-        <div class="panel" id="history-panel">
-            <h3 style="display:flex;justify-content:space-between;">🖼️ Lịch sử <button id="btn-close-history">✕</button></h3>
+        <div id="history-panel">
+            <h3 style="display:flex;justify-content:space-between;">🖼️ Lịch sử ảnh <button id="btn-close-history">✕</button></h3>
             <div class="history-grid" id="history-grid"></div>
         </div>
 
@@ -488,7 +759,7 @@
             <div class="actions">
                 <button class="btn-download" id="btn-save-download">💾 Lưu & Tải</button>
                 <button class="btn-retake" id="btn-retake">🔄 Chụp lại</button>
-                <button class="btn-close" id="btn-close-result">✕</button>
+                <button class="btn-close" id="btn-close-result">✕ Đóng</button>
             </div>
         </div>
         <div id="overlay-backdrop"></div>
@@ -497,6 +768,7 @@
 
     <script>
         (() => {
+            // ==================== DOM ====================
             const $ = s => document.querySelector(s);
             const $$ = s => document.querySelectorAll(s);
             const video = $('#video');
@@ -518,6 +790,7 @@
             const btnBeauty = $('#btn-beauty');
             const frameGrid = $('#frame-grid');
 
+            // State
             let cameraStream = null;
             let beautyEnabled = true;
             let selectedBg = null;
@@ -527,7 +800,8 @@
             let capturedFrames = [];
             let isCapturing = false;
             let animationId = null;
-            let stickerIdCounter = 0, textIdCounter = 0;
+            let stickerIdCounter = 0,
+                textIdCounter = 0;
             let currentStripDataUrl = null;
             let selectedFrame = null;
             let facingMode = 'user';
@@ -537,6 +811,7 @@
             const MAX_HISTORY = 10;
             const HISTORY_KEY = 'gockyniem_history';
 
+            // ==================== FRAME DATA (30 pastel, có 2,3,4,6 slots) ====================
             const palettes = {
                 lavender: { bg: '#f6f3fc', accent: '#d5cbf0', accent2: '#b8a9e8' },
                 pink: { bg: '#fef6f9', accent: '#fce4ec', accent2: '#f4c7d4' },
@@ -549,9 +824,9 @@
             };
             const paletteKeys = Object.keys(palettes);
             const frameTemplates = [];
-            const decorationTypes = ['stars','hearts','flowers','dots','stripes','clouds','mixed','sparkles','minimal'];
-            // Tạo 30 khung với đa dạng số slot: 2, 3, 4, 6
-            const slotOptions = [2, 3, 4, 6];
+            const decorationTypes = ['stars', 'hearts', 'flowers', 'dots', 'stripes', 'clouds', 'mixed', 'sparkles',
+            'minimal'];
+            const slotOptions = [2, 3, 4, 6]; // THÊM 2 VÀ 6
             for (let i = 0; i < 30; i++) {
                 const pal = paletteKeys[i % paletteKeys.length];
                 const slots = slotOptions[i % slotOptions.length];
@@ -563,7 +838,7 @@
                     color: palettes[pal].accent2 + '80'
                 };
                 frameTemplates.push({
-                    id: i+1,
+                    id: i + 1,
                     name: `Pastel ${i+1}`,
                     palette: pal,
                     slots,
@@ -575,13 +850,15 @@
 
             function buildFrameGrid() {
                 frameGrid.innerHTML = '';
-                frameTemplates.forEach(f => {
+                frameTemplates.forEach((f) => {
                     const thumb = document.createElement('div');
                     thumb.className = 'frame-thumb';
                     if (selectedFrame && selectedFrame.id === f.id) thumb.classList.add('selected');
                     const canvas = document.createElement('canvas');
-                    canvas.width = 120; canvas.height = 213;
-                    canvas.style.width = '100%'; canvas.style.height = '100%';
+                    canvas.width = 120;
+                    canvas.height = 213;
+                    canvas.style.width = '100%';
+                    canvas.style.height = '100%';
                     const ctx = canvas.getContext('2d');
                     drawFrameOnCanvas(ctx, canvas.width, canvas.height, f);
                     thumb.appendChild(canvas);
@@ -590,6 +867,7 @@
                         thumb.classList.add('selected');
                         selectedFrame = f;
                         showToast(`🎀 Đã chọn khung #${f.id} (${f.slots} ảnh)`);
+                        closeAllPanels();
                     });
                     frameGrid.appendChild(thumb);
                 });
@@ -597,178 +875,429 @@
 
             function drawFrameOnCanvas(ctx, w, h, frameData) {
                 const p = palettes[frameData.palette];
-                if (frameData.bgType === 'solid') { ctx.fillStyle = p.bg; ctx.fillRect(0,0,w,h); }
-                else if (frameData.bgType === 'gradient') {
-                    const grad = ctx.createLinearGradient(0,0,0,h);
-                    grad.addColorStop(0, p.bg); grad.addColorStop(1, p.accent);
-                    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+                if (frameData.bgType === 'solid') {
+                    ctx.fillStyle = p.bg;
+                    ctx.fillRect(0, 0, w, h);
+                } else if (frameData.bgType === 'gradient') {
+                    const grad = ctx.createLinearGradient(0, 0, 0, h);
+                    grad.addColorStop(0, p.bg);
+                    grad.addColorStop(1, p.accent);
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(0, 0, w, h);
                 } else {
-                    ctx.fillStyle = p.bg; ctx.fillRect(0,0,w,h);
+                    ctx.fillStyle = p.bg;
+                    ctx.fillRect(0, 0, w, h);
                     ctx.fillStyle = p.accent2 + '30';
-                    for (let i=0;i<20;i++) { ctx.beginPath(); ctx.arc(Math.random()*w, Math.random()*h, 2+Math.random()*4,0,Math.PI*2); ctx.fill(); }
+                    for (let i = 0; i < 20; i++) {
+                        ctx.beginPath();
+                        ctx.arc(Math.random() * w, Math.random() * h, 2 + Math.random() * 4, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
                 }
                 const decos = generateDecorations(frameData.decoType, w, h);
                 decos.forEach(d => {
-                    ctx.save(); ctx.globalAlpha = d.opacity||0.3; ctx.font = `${d.size||12}px "Segoe UI"`; ctx.fillStyle = p.accent2; ctx.fillText(d.emoji, d.x, d.y); ctx.restore();
+                    ctx.save();
+                    ctx.globalAlpha = d.opacity || 0.3;
+                    ctx.font = `${d.size || 12}px "Segoe UI"`;
+                    ctx.fillStyle = p.accent2;
+                    ctx.fillText(d.emoji, d.x, d.y);
+                    ctx.restore();
                 });
                 const slotCount = frameData.slots;
                 const totalSlotArea = h * 0.75;
                 const gap = h * 0.02;
-                const slotH = (totalSlotArea - (slotCount-1)*gap) / slotCount;
+                const slotH = (totalSlotArea - (slotCount - 1) * gap) / slotCount;
                 const slotW = w * 0.8;
-                const startY = (h - (slotCount*slotH + (slotCount-1)*gap)) / 2;
+                const startY = (h - (slotCount * slotH + (slotCount - 1) * gap)) / 2;
                 const slotX = (w - slotW) / 2;
                 ctx.fillStyle = '#fff';
                 ctx.strokeStyle = frameData.border.color;
                 ctx.lineWidth = parseFloat(frameData.border.thickness);
-                for (let i=0; i<slotCount; i++) {
-                    const y = startY + i*(slotH+gap);
-                    ctx.beginPath(); ctx.roundRect(slotX, y, slotW, slotH, parseInt(frameData.border.radius)); ctx.fill(); ctx.stroke();
-                    ctx.fillStyle = '#d5cbf0'; ctx.font = '16px "Segoe UI"'; ctx.fillText('📷', slotX+slotW/2-8, y+slotH/2+6); ctx.fillStyle = '#fff';
+                for (let i = 0; i < slotCount; i++) {
+                    const y = startY + i * (slotH + gap);
+                    ctx.beginPath();
+                    ctx.roundRect(slotX, y, slotW, slotH, parseInt(frameData.border.radius));
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = '#d5cbf0';
+                    ctx.font = '16px "Segoe UI"';
+                    ctx.fillText('📷', slotX + slotW / 2 - 8, y + slotH / 2 + 6);
+                    ctx.fillStyle = '#fff';
                 }
             }
 
             function generateDecorations(type, w, h) {
                 const decos = [];
-                const emojis = { stars:['⭐','✨','🌟','💫'], hearts:['💖','💕','💗','❤️'], flowers:['🌸','🌺','🌷'], dots:['•','·'], clouds:['☁️'], mixed:['⭐','💖','🌸','✨','🦋'], sparkles:['✨','💫'], minimal:['·'] };
+                const emojis = {
+                    stars: ['⭐', '✨', '🌟', '💫'],
+                    hearts: ['💖', '💕', '💗', '❤️'],
+                    flowers: ['🌸', '🌺', '🌷'],
+                    dots: ['•', '·'],
+                    clouds: ['☁️'],
+                    mixed: ['⭐', '💖', '🌸', '✨', '🦋'],
+                    sparkles: ['✨', '💫'],
+                    minimal: ['·']
+                };
                 const list = emojis[type] || ['✨'];
-                for (let i=0;i<8;i++) decos.push({ emoji: list[Math.floor(Math.random()*list.length)], x:5+Math.random()*(w-30), y:10+Math.random()*(h-20), size:10+Math.random()*10, opacity:0.2+Math.random()*0.4 });
+                for (let i = 0; i < 8; i++) {
+                    decos.push({
+                        emoji: list[Math.floor(Math.random() * list.length)],
+                        x: 5 + Math.random() * (w - 30),
+                        y: 10 + Math.random() * (h - 20),
+                        size: 10 + Math.random() * 10,
+                        opacity: 0.2 + Math.random() * 0.4
+                    });
+                }
                 return decos;
             }
 
+            // ==================== CAMERA ====================
             async function initCamera() {
-                const noCam = $('#no-camera'); noCam.style.display = 'none'; video.style.display = 'block'; previewCanvas.style.display = 'block';
+                const noCam = $('#no-camera');
+                noCam.style.display = 'none';
+                video.style.display = 'block';
+                previewCanvas.style.display = 'block';
                 try {
-                    if (cameraStream) { cameraStream.getTracks().forEach(t=>t.stop()); cameraStream = null; }
-                    const stream = await navigator.mediaDevices.getUserMedia({ video: { width:{ideal:1280}, height:{ideal:720}, facingMode }, audio: false });
-                    cameraStream = stream; video.srcObject = stream; await video.play();
-                    startPreviewLoop(); showToast('📷 Camera sẵn sàng');
-                } catch (err) { video.style.display = 'none'; previewCanvas.style.display = 'none'; noCam.style.display = 'flex'; }
+                    if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop());
+                        cameraStream = null; }
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: facingMode },
+                        audio: false
+                    });
+                    cameraStream = stream;
+                    video.srcObject = stream;
+                    await video.play();
+                    startPreviewLoop();
+                    showToast('📷 Camera sẵn sàng');
+                } catch (err) {
+                    video.style.display = 'none';
+                    previewCanvas.style.display = 'none';
+                    noCam.style.display = 'flex';
+                }
             }
-            function stopCamera() { if (cameraStream) { cameraStream.getTracks().forEach(t=>t.stop()); cameraStream = null; } if (animationId) cancelAnimationFrame(animationId); video.srcObject = null; }
-            async function flipCamera() { facingMode = facingMode==='user'?'environment':'user'; await initCamera(); showToast(`🔄 Camera ${facingMode==='user'?'trước':'sau'}`); }
+
+            function stopCamera() {
+                if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop());
+                    cameraStream = null; }
+                if (animationId) cancelAnimationFrame(animationId);
+                video.srcObject = null;
+            }
+
+            async function flipCamera() {
+                facingMode = facingMode === 'user' ? 'environment' : 'user';
+                await initCamera();
+                showToast(`🔄 Camera ${facingMode==='user'?'trước':'sau'}`);
+            }
 
             function startPreviewLoop() {
                 if (animationId) cancelAnimationFrame(animationId);
                 const loop = () => {
-                    if (!cameraStream || video.readyState<2) { animationId = requestAnimationFrame(loop); return; }
-                    const w = video.videoWidth||640, h = video.videoHeight||480;
-                    if (previewCanvas.width!==w || previewCanvas.height!==h) { previewCanvas.width=w; previewCanvas.height=h; effectsCanvas.width=w; effectsCanvas.height=h; }
-                    previewCtx.clearRect(0,0,w,h);
-                    previewCtx.save(); previewCtx.translate(w,0); previewCtx.scale(-1,1);
-                    previewCtx.filter = beautyEnabled ? 'blur(0.8px) brightness(1.08) contrast(1.04) saturate(1.1)' : 'none';
-                    previewCtx.drawImage(video,0,0,w,h); previewCtx.restore(); previewCtx.filter = 'none';
-                    if (currentFilter!=='none') { previewCtx.filter = currentFilter; previewCtx.drawImage(previewCanvas,0,0,w,h); previewCtx.filter = 'none'; }
+                    if (!cameraStream || video.readyState < 2) { animationId = requestAnimationFrame(loop); return; }
+                    const w = video.videoWidth || 640,
+                        h = video.videoHeight || 480;
+                    if (previewCanvas.width !== w || previewCanvas.height !== h) { previewCanvas.width = w;
+                        previewCanvas.height = h;
+                        effectsCanvas.width = w;
+                        effectsCanvas.height = h; }
+                    previewCtx.clearRect(0, 0, w, h);
+                    previewCtx.save();
+                    previewCtx.translate(w, 0);
+                    previewCtx.scale(-1, 1);
+                    previewCtx.filter = beautyEnabled ? 'blur(0.8px) brightness(1.08) contrast(1.04) saturate(1.1)' :
+                        'none';
+                    previewCtx.drawImage(video, 0, 0, w, h);
+                    previewCtx.restore();
+                    previewCtx.filter = 'none';
+                    if (currentFilter !== 'none') { previewCtx.filter = currentFilter;
+                        previewCtx.drawImage(previewCanvas, 0, 0, w, h);
+                        previewCtx.filter = 'none'; }
                     if (showEffects) updateEffects();
                     animationId = requestAnimationFrame(loop);
-                }; loop();
+                };
+                loop();
             }
-            function toggleBeauty() { beautyEnabled=!beautyEnabled; beautyIndicator.classList.toggle('active',beautyEnabled); btnBeauty.style.background=beautyEnabled?'#f4f2ff':'#fff'; showToast(beautyEnabled?'✨ Làm đẹp':'🔅 Tắt làm đẹp'); }
 
+            function toggleBeauty() {
+                beautyEnabled = !beautyEnabled;
+                beautyIndicator.classList.toggle('active', beautyEnabled);
+                btnBeauty.style.background = beautyEnabled ? '#f4f2ff' : '#fff';
+                showToast(beautyEnabled ? '✨ Đã bật làm đẹp' : '🔅 Tắt làm đẹp');
+            }
+
+            // ==================== EFFECTS ====================
             function initEffects(type) {
-                effectParticles = []; const w = previewCanvas.width||400, h = previewCanvas.height||600;
-                const count = type==='rain'?80:type==='snow'?60:40;
-                for (let i=0;i<count;i++) effectParticles.push({ x:Math.random()*w, y:Math.random()*h, speed:1+Math.random()*(type==='rain'?10:2), size:type==='rain'?1+Math.random()*2:type==='snow'?2+Math.random()*4:3+Math.random()*6, opacity:0.3+Math.random()*0.5 });
-            }
-            function updateEffects() {
-                const w=effectsCanvas.width, h=effectsCanvas.height; effectsCtx.clearRect(0,0,w,h);
-                effectParticles.forEach(p=>{
-                    p.y+=p.speed; if(p.y>h){p.y=-10; p.x=Math.random()*w;}
-                    effectsCtx.fillStyle = effectType==='rain'?'rgba(200,220,255,0.6)':effectType==='snow'?'rgba(255,255,255,0.8)':'rgba(255,240,180,0.5)';
-                    effectsCtx.beginPath();
-                    if(effectType==='rain'){ effectsCtx.moveTo(p.x,p.y); effectsCtx.lineTo(p.x-1,p.y+10); effectsCtx.lineWidth=1; effectsCtx.strokeStyle='rgba(200,220,255,0.6)'; effectsCtx.stroke(); }
-                    else { effectsCtx.arc(p.x,p.y,p.size,0,Math.PI*2); effectsCtx.fill(); }
-                });
-            }
-            function toggleEffects() { showEffects=!showEffects; if(showEffects){ effectType=['rain','snow','sunny'][Math.floor(Math.random()*3)]; initEffects(effectType); showToast(`🌈 Hiệu ứng: ${effectType==='rain'?'Mưa':effectType==='snow'?'Tuyết':'Nắng'}`); } else { effectsCtx.clearRect(0,0,effectsCanvas.width,effectsCanvas.height); showToast('🌈 Tắt hiệu ứng'); } }
-
-            const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-            function playShutterSound() { if(audioCtx.state==='suspended') audioCtx.resume(); const now=audioCtx.currentTime; const osc1=audioCtx.createOscillator(), gain1=audioCtx.createGain(); osc1.type='square'; osc1.frequency.setValueAtTime(1100,now); osc1.frequency.exponentialRampToValueAtTime(700,now+0.05); gain1.gain.setValueAtTime(0.25,now); gain1.gain.exponentialRampToValueAtTime(0.001,now+0.07); osc1.connect(gain1).connect(audioCtx.destination); osc1.start(now); osc1.stop(now+0.07); const osc2=audioCtx.createOscillator(), gain2=audioCtx.createGain(); osc2.type='square'; osc2.frequency.setValueAtTime(1300,now+0.09); osc2.frequency.exponentialRampToValueAtTime(900,now+0.14); gain2.gain.setValueAtTime(0.2,now+0.09); gain2.gain.exponentialRampToValueAtTime(0.001,now+0.16); osc2.connect(gain2).connect(audioCtx.destination); osc2.start(now+0.09); osc2.stop(now+0.16); }
-            function triggerFlash() { flash.classList.add('fire'); setTimeout(()=>flash.classList.remove('fire'),60); }
-            function countdown(seconds) { return new Promise(resolve=>{let remaining=seconds; countdownOverlay.classList.add('active'); const tick=()=>{if(remaining<=0){countdownNumber.textContent=''; countdownOverlay.classList.remove('active'); resolve(); return;} countdownNumber.textContent=remaining; countdownNumber.style.animation='none'; void countdownNumber.offsetWidth; countdownNumber.style.animation='countBounce 0.6s ease-out'; remaining--; setTimeout(tick,800);}; tick();}); }
-            function updateProgressDots(total,current) { progressDots.innerHTML=''; for(let i=0;i<total;i++){const dot=document.createElement('div'); dot.className='dot'+(i<current?' done':'')+(i===current?' current':''); progressDots.appendChild(dot);} }
-            function clearProgressDots() { progressDots.innerHTML=''; }
-
-            async function captureFrame(applyBg=false) {
-                if (!video.videoWidth||!video.videoHeight) return null;
-                const w=video.videoWidth, h=video.videoHeight;
-                const offCanvas=document.createElement('canvas'); offCanvas.width=w; offCanvas.height=h;
-                const ctx=offCanvas.getContext('2d');
-                ctx.save(); ctx.translate(w,0); ctx.scale(-1,1);
-                ctx.filter = beautyEnabled?'blur(0.8px) brightness(1.08) contrast(1.04) saturate(1.1)':'none';
-                ctx.drawImage(video,0,0,w,h); ctx.restore(); ctx.filter='none';
-                if(currentFilter!=='none'){ctx.filter=currentFilter; ctx.drawImage(offCanvas,0,0,w,h); ctx.filter='none';}
-                if(applyBg && selectedBg){
-                    const bgCanvas=document.createElement('canvas'); bgCanvas.width=w; bgCanvas.height=h;
-                    const bgCtx=bgCanvas.getContext('2d');
-                    if(selectedBg.startsWith('data:')||selectedBg.startsWith('blob:')){
-                        return new Promise(resolve=>{const img=new Image(); img.src=selectedBg; img.onload=()=>{bgCtx.drawImage(img,0,0,w,h); bgCtx.globalAlpha=0.9; bgCtx.drawImage(offCanvas,0,0,w,h); resolve(bgCanvas.toDataURL('image/jpeg',0.9));};});
-                    }else{ bgCtx.fillStyle=selectedBg; bgCtx.fillRect(0,0,w,h); bgCtx.globalAlpha=0.9; bgCtx.drawImage(offCanvas,0,0,w,h); return bgCanvas.toDataURL('image/jpeg',0.9); }
+                effectParticles = [];
+                const w = previewCanvas.width || 400;
+                const h = previewCanvas.height || 600;
+                const count = type === 'rain' ? 80 : type === 'snow' ? 60 : 40;
+                for (let i = 0; i < count; i++) {
+                    effectParticles.push({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        speed: 1 + Math.random() * (type === 'rain' ? 10 : 2),
+                        size: type === 'rain' ? 1 + Math.random() * 2 : type === 'snow' ? 2 + Math.random() * 4 : 3 +
+                            Math.random() * 6,
+                        opacity: 0.3 + Math.random() * 0.5,
+                    });
                 }
-                return offCanvas.toDataURL('image/jpeg',0.9);
             }
 
-            function updatePhotoSidebar() {
-                photoSidebar.innerHTML=''; if(capturedFrames.length===0) return;
-                capturedFrames.forEach((frameDataUrl,idx)=>{
-                    const item=document.createElement('div'); item.className='sidebar-thumb';
-                    const img=document.createElement('img'); img.src=frameDataUrl; img.loading='lazy'; item.appendChild(img);
-                    const retakeIcon=document.createElement('span'); retakeIcon.className='retake-icon'; retakeIcon.textContent='📷';
-                    retakeIcon.addEventListener('click',(e)=>{e.stopPropagation(); startRetakeFrame(idx);}); item.appendChild(retakeIcon);
-                    item.addEventListener('click',()=>startRetakeFrame(idx)); photoSidebar.appendChild(item);
+            function updateEffects() {
+                const w = effectsCanvas.width;
+                const h = effectsCanvas.height;
+                effectsCtx.clearRect(0, 0, w, h);
+                effectParticles.forEach(p => {
+                    p.y += p.speed;
+                    if (p.y > h) { p.y = -10;
+                        p.x = Math.random() * w; }
+                    effectsCtx.fillStyle = effectType === 'rain' ? 'rgba(200,220,255,0.6)' : effectType === 'snow' ?
+                        'rgba(255,255,255,0.8)' : 'rgba(255,240,180,0.5)';
+                    effectsCtx.beginPath();
+                    if (effectType === 'rain') {
+                        effectsCtx.moveTo(p.x, p.y);
+                        effectsCtx.lineTo(p.x - 1, p.y + 10);
+                        effectsCtx.lineWidth = 1;
+                        effectsCtx.strokeStyle = 'rgba(200,220,255,0.6)';
+                        effectsCtx.stroke();
+                    } else {
+                        effectsCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        effectsCtx.fill();
+                    }
                 });
             }
-            async function startRetakeFrame(index) {
-                if(isCapturing||!cameraStream) return;
-                const countdownSec = parseInt($('#countdown-select').value);
-                await countdown(countdownSec); triggerFlash(); playShutterSound(); await sleep(80);
-                const frame = await captureFrame(true);
-                if(frame){ capturedFrames[index]=frame; updatePhotoSidebar(); currentStripDataUrl = await createPhotoStrip(capturedFrames); showResult(currentStripDataUrl); }
+
+            function toggleEffects() {
+                showEffects = !showEffects;
+                if (showEffects) {
+                    effectType = ['rain', 'snow', 'sunny'][Math.floor(Math.random() * 3)];
+                    initEffects(effectType);
+                    showToast(`🌈 Hiệu ứng: ${effectType==='rain'?'Mưa':effectType==='snow'?'Tuyết':'Nắng'}`);
+                } else {
+                    effectsCtx.clearRect(0, 0, effectsCanvas.width, effectsCanvas.height);
+                    showToast('🌈 Tắt hiệu ứng');
+                }
             }
 
+            // Sound
+            const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+
+            function playShutterSound() {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'square';
+                osc1.frequency.setValueAtTime(1100, now);
+                osc1.frequency.exponentialRampToValueAtTime(700, now + 0.05);
+                gain1.gain.setValueAtTime(0.25, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+                osc1.connect(gain1).connect(audioCtx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.07);
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(1300, now + 0.09);
+                osc2.frequency.exponentialRampToValueAtTime(900, now + 0.14);
+                gain2.gain.setValueAtTime(0.2, now + 0.09);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+                osc2.connect(gain2).connect(audioCtx.destination);
+                osc2.start(now + 0.09);
+                osc2.stop(now + 0.16);
+            }
+
+            function triggerFlash() { flash.classList.add('fire');
+                setTimeout(() => flash.classList.remove('fire'), 60); }
+
+            function countdown(seconds) {
+                return new Promise(resolve => {
+                    let remaining = seconds;
+                    countdownOverlay.classList.add('active');
+                    const tick = () => {
+                        if (remaining <= 0) { countdownNumber.textContent = '';
+                            countdownOverlay.classList.remove('active');
+                            resolve(); return; }
+                        countdownNumber.textContent = remaining;
+                        countdownNumber.style.animation = 'none';
+                        void countdownNumber.offsetWidth;
+                        countdownNumber.style.animation = 'countBounce 0.6s ease-out';
+                        remaining--;
+                        setTimeout(tick, 800);
+                    };
+                    tick();
+                });
+            }
+
+            function updateProgressDots(total, current) {
+                progressDots.innerHTML = '';
+                for (let i = 0; i < total; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot' + (i < current ? ' done' : '') + (i === current ? ' current' : '');
+                    progressDots.appendChild(dot);
+                }
+            }
+
+            function clearProgressDots() { progressDots.innerHTML = ''; }
+
+            // ==================== CAPTURE ====================
+            async function captureFrame(applyBg = false) {
+                if (!video.videoWidth || !video.videoHeight) return null;
+                const w = video.videoWidth,
+                    h = video.videoHeight;
+                const offCanvas = document.createElement('canvas');
+                offCanvas.width = w;
+                offCanvas.height = h;
+                const ctx = offCanvas.getContext('2d');
+                ctx.save();
+                ctx.translate(w, 0);
+                ctx.scale(-1, 1);
+                ctx.filter = beautyEnabled ? 'blur(0.8px) brightness(1.08) contrast(1.04) saturate(1.1)' : 'none';
+                ctx.drawImage(video, 0, 0, w, h);
+                ctx.restore();
+                ctx.filter = 'none';
+                if (currentFilter !== 'none') { ctx.filter = currentFilter;
+                    ctx.drawImage(offCanvas, 0, 0, w, h);
+                    ctx.filter = 'none'; }
+                if (applyBg && selectedBg) {
+                    const bgCanvas = document.createElement('canvas');
+                    bgCanvas.width = w;
+                    bgCanvas.height = h;
+                    const bgCtx = bgCanvas.getContext('2d');
+                    if (selectedBg.startsWith('data:') || selectedBg.startsWith('blob:')) {
+                        return new Promise(resolve => {
+                            const img = new Image();
+                            img.src = selectedBg;
+                            img.onload = () => { bgCtx.drawImage(img, 0, 0, w, h);
+                                bgCtx.globalAlpha = 0.9;
+                                bgCtx.drawImage(offCanvas, 0, 0, w, h);
+                                resolve(bgCanvas.toDataURL('image/jpeg', 0.9)); };
+                        });
+                    } else {
+                        bgCtx.fillStyle = selectedBg;
+                        bgCtx.fillRect(0, 0, w, h);
+                        bgCtx.globalAlpha = 0.9;
+                        bgCtx.drawImage(offCanvas, 0, 0, w, h);
+                        return bgCanvas.toDataURL('image/jpeg', 0.9);
+                    }
+                }
+                return offCanvas.toDataURL('image/jpeg', 0.9);
+            }
+
+            // ==================== SIDEBAR ====================
+            function updatePhotoSidebar() {
+                photoSidebar.innerHTML = '';
+                if (capturedFrames.length === 0) return;
+                capturedFrames.forEach((frameDataUrl, idx) => {
+                    const item = document.createElement('div');
+                    item.className = 'sidebar-thumb';
+                    const img = document.createElement('img');
+                    img.src = frameDataUrl;
+                    img.loading = 'lazy';
+                    item.appendChild(img);
+                    const retakeIcon = document.createElement('span');
+                    retakeIcon.className = 'retake-icon';
+                    retakeIcon.textContent = '📷';
+                    retakeIcon.addEventListener('click', (e) => { e.stopPropagation();
+                        startRetakeFrame(idx); });
+                    item.appendChild(retakeIcon);
+                    item.addEventListener('click', () => startRetakeFrame(idx));
+                    photoSidebar.appendChild(item);
+                });
+            }
+
+            async function startRetakeFrame(index) {
+                if (isCapturing || !cameraStream) return;
+                const countdownSec = parseInt($('#countdown-select').value);
+                await countdown(countdownSec);
+                triggerFlash();
+                playShutterSound();
+                await sleep(80);
+                const frame = await captureFrame(true);
+                if (frame) {
+                    capturedFrames[index] = frame;
+                    updatePhotoSidebar();
+                    currentStripDataUrl = await createPhotoStrip(capturedFrames);
+                    showResult(currentStripDataUrl);
+                }
+            }
+
+            // ==================== SESSION ====================
             async function startPhotoCapture() {
-                if(isCapturing||!cameraStream) return;
-                if(!selectedFrame){showToast('⚠️ Vui lòng chọn khung pastel trước!'); return;}
-                isCapturing=true; btnCapture.disabled=true; capturedFrames=[]; updatePhotoSidebar();
+                if (isCapturing || !cameraStream) return;
+                if (!selectedFrame) { showToast('⚠️ Vui lòng chọn khung pastel trước!'); return; }
+                isCapturing = true;
+                btnCapture.disabled = true;
+                capturedFrames = [];
+                updatePhotoSidebar();
                 const totalShots = selectedFrame.slots;
                 const countdownSec = parseInt($('#countdown-select').value);
-                updateProgressDots(totalShots,0);
-                for(let i=0;i<totalShots;i++){
-                    updateProgressDots(totalShots,i); await countdown(countdownSec); triggerFlash(); playShutterSound(); await sleep(80);
+                updateProgressDots(totalShots, 0);
+                for (let i = 0; i < totalShots; i++) {
+                    updateProgressDots(totalShots, i);
+                    await countdown(countdownSec);
+                    triggerFlash();
+                    playShutterSound();
+                    await sleep(80);
                     const frame = await captureFrame(true);
-                    if(frame){ capturedFrames.push(frame); updatePhotoSidebar(); }
-                    updateProgressDots(totalShots,i+1); if(i<totalShots-1) await sleep(400);
+                    if (frame) { capturedFrames.push(frame);
+                        updatePhotoSidebar(); }
+                    updateProgressDots(totalShots, i + 1);
+                    if (i < totalShots - 1) await sleep(400);
                 }
-                clearProgressDots(); currentStripDataUrl = await createPhotoStrip(capturedFrames); showResult(currentStripDataUrl);
-                isCapturing=false; btnCapture.disabled=false;
+                clearProgressDots();
+                currentStripDataUrl = await createPhotoStrip(capturedFrames);
+                showResult(currentStripDataUrl);
+                isCapturing = false;
+                btnCapture.disabled = false;
             }
 
             async function createPhotoStrip(frames) {
                 const frame = selectedFrame;
                 const pal = palettes[frame.palette];
                 const slotCount = frame.slots;
-                const stripW = 600, stripH = 1067;
-                const canvas = document.createElement('canvas'); canvas.width=stripW; canvas.height=stripH;
+                const stripW = 600,
+                    stripH = 1067;
+                const canvas = document.createElement('canvas');
+                canvas.width = stripW;
+                canvas.height = stripH;
                 const ctx = canvas.getContext('2d');
-                if(frame.bgType==='solid'){ ctx.fillStyle=pal.bg; ctx.fillRect(0,0,stripW,stripH); }
-                else if(frame.bgType==='gradient'){ const grad=ctx.createLinearGradient(0,0,0,stripH); grad.addColorStop(0,pal.bg); grad.addColorStop(1,pal.accent); ctx.fillStyle=grad; ctx.fillRect(0,0,stripW,stripH); }
-                else { ctx.fillStyle=pal.bg; ctx.fillRect(0,0,stripW,stripH); ctx.fillStyle=pal.accent2+'30'; for(let i=0;i<30;i++){ctx.beginPath(); ctx.arc(Math.random()*stripW,Math.random()*stripH,3+Math.random()*6,0,Math.PI*2); ctx.fill();} }
+                if (frame.bgType === 'solid') { ctx.fillStyle = pal.bg;
+                    ctx.fillRect(0, 0, stripW, stripH); } else if (frame.bgType === 'gradient') { const grad = ctx
+                        .createLinearGradient(0, 0, 0, stripH);
+                    grad.addColorStop(0, pal.bg);
+                    grad.addColorStop(1, pal.accent);
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(0, 0, stripW, stripH); } else { ctx.fillStyle = pal.bg;
+                    ctx.fillRect(0, 0, stripW, stripH);
+                    ctx.fillStyle = pal.accent2 + '30'; for (let i = 0; i < 30; i++) { ctx.beginPath();
+                        ctx.arc(Math.random() * stripW, Math.random() * stripH, 3 + Math.random() * 6, 0, Math.PI * 2);
+                        ctx.fill(); } }
                 const decos = generateDecorations(frame.decoType, stripW, stripH);
-                decos.forEach(d=>{ ctx.save(); ctx.globalAlpha=d.opacity||0.3; ctx.font=`${d.size*1.5}px "Segoe UI"`; ctx.fillStyle=pal.accent2; ctx.fillText(d.emoji,d.x,d.y); ctx.restore(); });
+                decos.forEach(d => { ctx.save();
+                    ctx.globalAlpha = d.opacity || 0.3;
+                    ctx.font = `${d.size*1.5}px "Segoe UI"`;
+                    ctx.fillStyle = pal.accent2;
+                    ctx.fillText(d.emoji, d.x, d.y);
+                    ctx.restore(); });
                 const totalSlotArea = stripH * 0.75;
                 const gap = stripH * 0.02;
-                const slotH = (totalSlotArea - (slotCount-1)*gap) / slotCount;
+                const slotH = (totalSlotArea - (slotCount - 1) * gap) / slotCount;
                 const slotW = stripW * 0.8;
-                const startY = (stripH - (slotCount*slotH + (slotCount-1)*gap)) / 2;
+                const startY = (stripH - (slotCount * slotH + (slotCount - 1) * gap)) / 2;
                 const slotX = (stripW - slotW) / 2;
-                ctx.fillStyle='#fff'; ctx.strokeStyle=frame.border.color; ctx.lineWidth=parseFloat(frame.border.thickness);
-                for(let i=0;i<slotCount;i++){
-                    const y = startY + i*(slotH+gap);
+                ctx.fillStyle = '#fff';
+                ctx.strokeStyle = frame.border.color;
+                ctx.lineWidth = parseFloat(frame.border.thickness);
+                for (let i = 0; i < slotCount; i++) {
+                    const y = startY + i * (slotH + gap);
                     const radius = parseInt(frame.border.radius);
-                    ctx.beginPath(); ctx.roundRect(slotX, y, slotW, slotH, radius); ctx.fill(); ctx.stroke();
-                    if(frames[i]){
+                    ctx.beginPath();
+                    ctx.roundRect(slotX, y, slotW, slotH, radius);
+                    ctx.fill();
+                    ctx.stroke();
+                    if (frames[i]) {
                         const img = await loadImage(frames[i]);
-                        // Vẽ ảnh với tỉ lệ cover (không méo)
+                        // VẼ ẢNH COVER – KHÔNG MÉO
                         const imgRatio = img.width / img.height;
                         const slotRatio = slotW / slotH;
                         let drawW, drawH, drawX, drawY;
@@ -783,79 +1312,274 @@
                             drawX = slotX;
                             drawY = y + (slotH - drawH) / 2;
                         }
-                        ctx.save(); ctx.beginPath(); ctx.roundRect(slotX, y, slotW, slotH, radius); ctx.clip();
-                        ctx.drawImage(img, drawX, drawY, drawW, drawH); ctx.restore();
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.roundRect(slotX, y, slotW, slotH, radius);
+                        ctx.clip();
+                        ctx.drawImage(img, drawX, drawY, drawW, drawH);
+                        ctx.restore();
                     }
                 }
-                ctx.fillStyle='#9ca3af'; ctx.font='600 14px "Segoe UI"'; ctx.textAlign='center';
-                ctx.fillText(new Date().toLocaleDateString('vi-VN'), stripW/2, stripH-80);
-                ctx.fillStyle='rgba(107,114,128,0.5)'; ctx.font='italic 11px "Segoe UI"';
-                ctx.fillText('💜 code web by Ducanh • donate: 0915779767 (MB BANK)', stripW/2, stripH-60);
-                return canvas.toDataURL('image/jpeg',0.92);
+                // Watermark với icon tim
+                ctx.fillStyle = '#9ca3af';
+                ctx.font = '600 14px "Segoe UI"';
+                ctx.textAlign = 'center';
+                ctx.fillText(new Date().toLocaleDateString('vi-VN'), stripW / 2, stripH - 80);
+                ctx.fillStyle = 'rgba(107,114,128,0.5)';
+                ctx.font = 'italic 11px "Segoe UI"';
+                ctx.fillText('💜 code web by Ducanh • donate: 0915779767 (MB BANK)', stripW / 2, stripH - 60);
+                return canvas.toDataURL('image/jpeg', 0.92);
             }
-            function loadImage(src){ return new Promise(resolve=>{const img=new Image(); img.onload=()=>resolve(img); img.src=src;}); }
-            function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
-            function showResult(dataUrl){ resultImage.src=dataUrl; resultModal.classList.add('open'); }
-            function hideResult(){ resultModal.classList.remove('open'); }
-            async function saveAndDownload(){
-                if(!currentStripDataUrl) return;
+
+            function loadImage(src) { return new Promise(resolve => { const img = new Image();
+                img.onload = () => resolve(img);
+                img.src = src; }); }
+
+            function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+            function showResult(dataUrl) { resultImage.src = dataUrl;
+                resultModal.classList.add('open'); }
+
+            function hideResult() { resultModal.classList.remove('open'); }
+
+            async function saveAndDownload() {
+                if (!currentStripDataUrl) return;
                 await saveToHistory(currentStripDataUrl);
-                const a=document.createElement('a'); a.href=currentStripDataUrl; a.download=`gockyniem_${Date.now()}.jpg`; a.click();
-                showToast('💜 Cảm ơn bạn đã dùng Góc Kỷ Niệm!'); hideResult();
+                const a = document.createElement('a');
+                a.href = currentStripDataUrl;
+                a.download = `gockyniem_${Date.now()}.jpg`;
+                a.click();
+                showToast('💜 Cảm ơn bạn đã dùng Góc Kỷ Niệm!');
+                hideResult();
             }
-            function retakeSession(){ hideResult(); showToast('🔄 Hãy chụp lại nhé!'); }
 
-            function openDB(){ return new Promise((resolve,reject)=>{const request=indexedDB.open('PhotoBoothDB',1); request.onupgradeneeded=(e)=>{const db=e.target.result; if(!db.objectStoreNames.contains('history')) db.createObjectStore('history',{keyPath:'id'});}; request.onsuccess=()=>resolve(request.result); request.onerror=()=>reject(request.error);}); }
-            async function saveToHistory(dataUrl){ try{ const db=await openDB(); const tx=db.transaction('history','readwrite'); const store=tx.objectStore('history'); store.add({id:Date.now(),dataUrl,date:new Date().toISOString()}); const countRequest=store.count(); countRequest.onsuccess=()=>{if(countRequest.result>MAX_HISTORY){const cursorRequest=store.openCursor(null,'next'); cursorRequest.onsuccess=(e)=>{const cursor=e.target.result; if(cursor&&countRequest.result>MAX_HISTORY){cursor.delete(); countRequest.result--; cursor.continue();}};}}; await tx.complete; }catch(e){ let history=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]'); history.unshift({id:Date.now(),dataUrl,date:new Date().toISOString()}); if(history.length>MAX_HISTORY) history.pop(); localStorage.setItem(HISTORY_KEY,JSON.stringify(history)); } }
-            async function loadHistory(){ historyGrid.innerHTML=''; try{ const db=await openDB(); const tx=db.transaction('history','readonly'); const store=tx.objectStore('history'); const request=store.getAll(); request.onsuccess=()=>{const history=request.result||[]; if(!history.length){historyGrid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:#9ca3af;">📭 Chưa có ảnh</div>'; return;} history.reverse().forEach(entry=>renderHistoryItem(entry));}; }catch{ let history=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]'); if(!history.length) historyGrid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;">📭 Chưa có ảnh</div>'; else history.forEach(entry=>renderHistoryItem(entry)); } }
-            function renderHistoryItem(entry){ const div=document.createElement('div'); div.className='history-item'; const img=document.createElement('img'); img.src=entry.dataUrl; img.loading='lazy'; div.appendChild(img); const delBtn=document.createElement('button'); delBtn.className='del-btn'; delBtn.textContent='✕'; delBtn.addEventListener('click',(e)=>{e.stopPropagation(); deleteHistoryEntry(entry.id);}); div.appendChild(delBtn); div.addEventListener('click',()=>{showResult(entry.dataUrl); historyPanelClose();}); historyGrid.appendChild(div); }
-            function historyPanelClose(){ $('#history-panel').classList.remove('open'); overlayBackdrop.classList.remove('show'); }
-            async function deleteHistoryEntry(id){ try{ const db=await openDB(); const tx=db.transaction('history','readwrite'); tx.objectStore('history').delete(id); await tx.complete; loadHistory(); }catch{ let history=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]'); history=history.filter(e=>e.id!==id); localStorage.setItem(HISTORY_KEY,JSON.stringify(history)); loadHistory(); } }
+            function retakeSession() { hideResult();
+                showToast('🔄 Hãy chụp lại nhé!'); }
 
-            function openPanel(id){ const panel=$(id); if(!panel) return; const isOpen=panel.classList.contains('open'); closeAllPanels(); if(!isOpen){panel.classList.add('open'); overlayBackdrop.classList.add('show');} }
-            function closeAllPanels(){ $$('.panel').forEach(p=>p.classList.remove('open')); overlayBackdrop.classList.remove('show'); }
-            const navItems=$$('.nav-item'); navItems.forEach(item=>{ item.addEventListener('click',()=>{ navItems.forEach(n=>n.classList.remove('active')); item.classList.add('active'); const panelId=item.dataset.panel; openPanel('#'+panelId); }); });
-            overlayBackdrop.addEventListener('click',closeAllPanels);
-            function showToast(msg){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>toast.classList.remove('show'),2500); }
+            // ==================== STORAGE ====================
+            function openDB() { return new Promise((resolve, reject) => { const request = indexedDB.open('PhotoBoothDB',
+                    1);
+                request.onupgradeneeded = (e) => { const db = e.target.result; if (!db.objectStoreNames.contains(
+                        'history')) db.createObjectStore('history', { keyPath: 'id' }); };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error); }); }
+            async function saveToHistory(dataUrl) { try { const db = await openDB(); const tx = db.transaction('history',
+                    'readwrite'); const store = tx.objectStore('history');
+                store.add({ id: Date.now(), dataUrl, date: new Date().toISOString() }); const countRequest = store
+                    .count();
+                countRequest.onsuccess = () => { if (countRequest.result > MAX_HISTORY) { const cursorRequest = store
+                            .openCursor(null, 'next');
+                        cursorRequest.onsuccess = (e) => { const cursor = e.target.result; if (cursor && countRequest
+                                .result > MAX_HISTORY) { cursor.delete();
+                                countRequest.result--;
+                                cursor.continue(); } }; } }; await tx.complete; } catch (e) { let history = JSON.parse(
+                        localStorage.getItem(HISTORY_KEY) || '[]');
+                    history.unshift({ id: Date.now(), dataUrl, date: new Date().toISOString() }); if (history.length >
+                        MAX_HISTORY) history.pop();
+                    localStorage.setItem(HISTORY_KEY, JSON.stringify(history)); } }
+            async function loadHistory() { historyGrid.innerHTML = ''; try { const db = await openDB(); const tx = db
+                    .transaction('history', 'readonly'); const store = tx.objectStore('history'); const request = store
+                    .getAll();
+                request.onsuccess = () => { const history = request.result || []; if (!history.length) { historyGrid
+                        .innerHTML =
+                        '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#9ca3af;">📭 Chưa có ảnh</div>'; return; }
+                    history.reverse().forEach(entry => renderHistoryItem(entry)); }; } catch { let history = JSON.parse(
+                        localStorage.getItem(HISTORY_KEY) || '[]'); if (!history.length) historyGrid.innerHTML =
+                        '<div style="grid-column:1/-1;text-align:center;padding:30px;">📭 Chưa có ảnh</div>'; else history
+                    .forEach(entry => renderHistoryItem(entry)); } }
 
-            const bgPresets=[{name:'Trắng tinh',color:'#ffffff'},{name:'Lavender nhạt',color:'#f3f0ff'},{name:'Hồng mây',color:'#fdf2f8'},{name:'Xanh mint',color:'#d1fae5'},{name:'Vàng nhạt',color:'#fef3c7'},{name:'Xanh baby',color:'#dbeafe'}];
-            function buildBgGrid(){ const grid=$('#bg-grid'); grid.innerHTML=''; bgPresets.forEach(bg=>{const div=document.createElement('div'); div.className='grid-item'; div.style.background=bg.color; div.addEventListener('click',()=>{$$('#bg-grid .grid-item').forEach(d=>d.classList.remove('selected')); div.classList.add('selected'); selectedBg=bg.color; closeAllPanels();}); grid.appendChild(div);}); }
-            const stickerEmojis=['⭐','❤️','💖','✨','🌟','💫','🎀','🌸','🌺','🦋','🐰','☁️','💜','🍒','🧸'];
-            function buildStickerGrid(){ const grid=$('#sticker-grid'); grid.innerHTML=''; stickerEmojis.forEach(e=>{const div=document.createElement('div'); div.className='grid-item'; div.style.fontSize='1.8rem'; div.textContent=e; div.addEventListener('click',()=>{addSticker(e); closeAllPanels();}); grid.appendChild(div);}); }
-            function addSticker(emoji){ const s={id:++stickerIdCounter,emoji,x:40+Math.random()*30,y:30+Math.random()*30}; stickersOnPhoto.push(s); renderStickers(); }
-            function renderStickers(){ document.querySelectorAll('.sticker-on-photo').forEach(e=>e.remove()); stickersOnPhoto.forEach(s=>{const el=document.createElement('div'); el.className='sticker-on-photo'; el.textContent=s.emoji; el.style.left=s.x+'%'; el.style.top=s.y+'%'; el.dataset.id=s.id; const delBtn=document.createElement('span'); delBtn.className='delete-sticker'; delBtn.textContent='✕'; delBtn.addEventListener('click',(e)=>{e.stopPropagation(); stickersOnPhoto=stickersOnPhoto.filter(st=>st.id!==s.id); renderStickers();}); el.appendChild(delBtn); makeDraggable(el,s); document.getElementById('camera-container').appendChild(el);}); }
-            function makeDraggable(el,obj){ let startX,startY,initLeft,initTop; el.addEventListener('pointerdown',e=>{e.preventDefault(); startX=e.clientX; startY=e.clientY; initLeft=parseFloat(el.style.left)||0; initTop=parseFloat(el.style.top)||0; el.setPointerCapture(e.pointerId); const move=ev=>{const dx=ev.clientX-startX, dy=ev.clientY-startY; const cw=el.parentNode.clientWidth, ch=el.parentNode.clientHeight; const nl=Math.max(0,Math.min(85,initLeft+(dx/cw)*100)); const nt=Math.max(0,Math.min(85,initTop+(dy/ch)*100)); el.style.left=nl+'%'; el.style.top=nt+'%'; obj.x=nl; obj.y=nt;}; const up=()=>{el.removeEventListener('pointermove',move); el.removeEventListener('pointerup',up);}; el.addEventListener('pointermove',move); el.addEventListener('pointerup',up);}); }
-            function addText(text,color){ const t={id:++textIdCounter,text,color,x:25+Math.random()*30,y:40+Math.random()*20}; textsOnPhoto.push(t); renderTexts(); }
-            function renderTexts(){ document.querySelectorAll('.text-on-photo').forEach(e=>e.remove()); textsOnPhoto.forEach(t=>{const el=document.createElement('div'); el.className='text-on-photo'; el.textContent=t.text; el.style.left=t.x+'%'; el.style.top=t.y+'%'; el.style.color=t.color; el.style.fontWeight='700'; el.style.fontSize='1.4rem'; const delBtn=document.createElement('span'); delBtn.className='delete-sticker'; delBtn.textContent='✕'; delBtn.addEventListener('click',(e)=>{e.stopPropagation(); textsOnPhoto=textsOnPhoto.filter(tx=>tx.id!==t.id); renderTexts();}); el.appendChild(delBtn); makeDraggable(el,t); document.getElementById('camera-container').appendChild(el);}); }
-            const filterPresets=[{name:'Tự nhiên',filter:'none'},{name:'Leica M10',filter:'contrast(1.1) saturate(0.9) brightness(1.05)'},{name:'Canon 5D',filter:'saturate(1.2) brightness(1.08) contrast(1.02)'},{name:'Fuji Classic',filter:'sepia(0.2) contrast(1.05) brightness(0.95)'}];
-            function buildFilterGrid(){ const grid=$('#filter-grid'); grid.innerHTML=''; filterPresets.forEach(f=>{const div=document.createElement('div'); div.className='grid-item'; div.textContent=f.name; div.style.fontSize='0.7rem'; div.style.fontWeight='600'; if(currentFilter===f.filter) div.classList.add('selected'); div.addEventListener('click',()=>{$$('#filter-grid .grid-item').forEach(d=>d.classList.remove('selected')); div.classList.add('selected'); currentFilter=f.filter; closeAllPanels();}); grid.appendChild(div);}); }
+            function renderHistoryItem(entry) { const div = document.createElement('div');
+                div.className = 'history-item'; const img = document.createElement('img');
+                img.src = entry.dataUrl;
+                img.loading = 'lazy';
+                div.appendChild(img); const delBtn = document.createElement('button');
+                delBtn.className = 'del-btn';
+                delBtn.textContent = '✕';
+                delBtn.addEventListener('click', (e) => { e.stopPropagation();
+                    deleteHistoryEntry(entry.id); });
+                div.appendChild(delBtn);
+                div.addEventListener('click', () => { showResult(entry.dataUrl);
+                    historyPanelClose(); });
+                historyGrid.appendChild(div); }
 
-            btnCapture.addEventListener('click',startPhotoCapture);
-            btnBeauty.addEventListener('click',toggleBeauty);
-            $('#btn-toggle-fx').addEventListener('click',toggleEffects);
-            $('#btn-flip-camera').addEventListener('click',flipCamera);
-            $('#btn-self-timer').addEventListener('click',()=>{const s=prompt('Nhập số giây hẹn giờ (1-10):','3'); if(s&&!isNaN(s)){const sec=Math.max(1,Math.min(10,parseInt(s))); $('#countdown-select').value=sec; showToast(`⏲️ Hẹn giờ ${sec} giây`);}});
-            $('#btn-backgrounds').addEventListener('click',()=>openPanel('#bg-panel'));
-            $('#btn-stickers').addEventListener('click',()=>openPanel('#sticker-panel'));
-            $('#btn-text').addEventListener('click',()=>openPanel('#text-panel'));
-            $('#btn-filters').addEventListener('click',()=>openPanel('#filter-panel'));
-            $('#btn-add-text').addEventListener('click',()=>{const text=$('#text-input').value.trim(); const color=$('#text-color').value; if(text){addText(text,color); $('#text-input').value='';}});
-            $('#btn-clear-text').addEventListener('click',()=>{textsOnPhoto=[]; renderTexts(); showToast('🗑️ Xoá chữ');});
-            $('#btn-reset-filter').addEventListener('click',()=>{currentFilter='none'; $$('#filter-grid .grid-item').forEach(d=>d.classList.remove('selected'));});
-            $('#custom-bg-input').addEventListener('change',e=>{const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{selectedBg=ev.target.result; closeAllPanels();}; reader.readAsDataURL(file);});
-            $('#btn-save-download').addEventListener('click',saveAndDownload);
-            $('#btn-retake').addEventListener('click',retakeSession);
-            $('#btn-close-result').addEventListener('click',hideResult);
-            resultModal.addEventListener('click',e=>{if(e.target===resultModal) hideResult();});
-            $('#btn-close-history').addEventListener('click',()=>{$('#history-panel').classList.remove('open'); overlayBackdrop.classList.remove('show');});
-            document.addEventListener('keydown',e=>{if(e.key===' '&&!isCapturing&&document.activeElement===document.body){e.preventDefault(); btnCapture.click();} if(e.key==='Escape'){hideResult(); closeAllPanels();}});
-            window.addEventListener('beforeunload',stopCamera);
+            function historyPanelClose() { $('#history-panel').classList.remove('open');
+                overlayBackdrop.classList.remove('show'); }
+            async function deleteHistoryEntry(id) { try { const db = await openDB(); const tx = db.transaction('history',
+                    'readwrite');
+                tx.objectStore('history').delete(id);
+                await tx.complete;
+                loadHistory(); } catch { let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+                history = history.filter(e => e.id !== id);
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+                loadHistory(); } }
 
-            initCamera(); buildFrameGrid(); buildBgGrid(); buildStickerGrid(); buildFilterGrid();
+            // ==================== UI PANELS ====================
+            function openPanel(id) { const panel = $(id); if (!panel) return; const isOpen = panel.classList.contains(
+                    'open');
+                closeAllPanels(); if (!isOpen) { panel.classList.add('open');
+                    overlayBackdrop.classList.add('show'); } }
+
+            function closeAllPanels() { $$('.panel').forEach(p => p.classList.remove('open'));
+                overlayBackdrop.classList.remove('show'); }
+            overlayBackdrop.addEventListener('click', closeAllPanels);
+
+            function showToast(msg) { toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toast._t);
+                toast._t = setTimeout(() => toast.classList.remove('show'), 2500); }
+
+            // ==================== BACKGROUNDS, STICKERS, TEXT, FILTERS ====================
+            const bgPresets = [
+                { name: 'Trắng tinh', color: '#ffffff' }, { name: 'Lavender nhạt', color: '#f3f0ff' }, { name: 'Hồng mây',
+                    color: '#fdf2f8' },
+                { name: 'Xanh mint', color: '#d1fae5' }, { name: 'Vàng nhạt', color: '#fef3c7' }, { name: 'Xanh baby',
+                    color: '#dbeafe' },
+            ];
+            function buildBgGrid() { const grid = $('#bg-grid');
+                grid.innerHTML = '';
+                bgPresets.forEach(bg => { const div = document.createElement('div');
+                    div.className = 'grid-item';
+                    div.style.background = bg.color;
+                    div.addEventListener('click', () => { $$('#bg-grid .grid-item').forEach(d => d.classList.remove(
+                            'selected'));
+                        div.classList.add('selected');
+                        selectedBg = bg.color;
+                        closeAllPanels(); });
+                    grid.appendChild(div); }); }
+            const stickerEmojis = ['⭐', '❤️', '💖', '✨', '🌟', '💫', '🎀', '🌸', '🌺', '🦋', '🐰', '☁️', '💜', '🍒', '🧸'];
+            function buildStickerGrid() { const grid = $('#sticker-grid');
+                grid.innerHTML = '';
+                stickerEmojis.forEach(e => { const div = document.createElement('div');
+                    div.className = 'grid-item';
+                    div.style.fontSize = '1.8rem';
+                    div.textContent = e;
+                    div.addEventListener('click', () => { addSticker(e);
+                        closeAllPanels(); });
+                    grid.appendChild(div); }); }
+            function addSticker(emoji) { const s = { id: ++stickerIdCounter, emoji, x: 40 + Math.random() * 30, y: 30 + Math
+                        .random() * 30 };
+                stickersOnPhoto.push(s);
+                renderStickers(); }
+            function renderStickers() { document.querySelectorAll('.sticker-on-photo').forEach(e => e.remove());
+                stickersOnPhoto.forEach(s => { const el = document.createElement('div');
+                    el.className = 'sticker-on-photo';
+                    el.textContent = s.emoji;
+                    el.style.left = s.x + '%';
+                    el.style.top = s.y + '%';
+                    el.dataset.id = s.id; const delBtn = document.createElement('span');
+                    delBtn.className = 'delete-sticker';
+                    delBtn.textContent = '✕';
+                    delBtn.addEventListener('click', (e) => { e.stopPropagation();
+                        stickersOnPhoto = stickersOnPhoto.filter(st => st.id !== s.id);
+                        renderStickers(); });
+                    el.appendChild(delBtn);
+                    makeDraggable(el, s);
+                    document.getElementById('camera-container').appendChild(el); }); }
+            function makeDraggable(el, obj) { let startX, startY, initLeft, initTop;
+                el.addEventListener('pointerdown', e => { e.preventDefault();
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    initLeft = parseFloat(el.style.left) || 0;
+                    initTop = parseFloat(el.style.top) || 0;
+                    el.setPointerCapture(e.pointerId); const move = ev => { const dx = ev.clientX - startX,
+                            dy = ev.clientY - startY; const cw = el.parentNode.clientWidth,
+                            ch = el.parentNode.clientHeight; const nl = Math.max(0, Math.min(85, initLeft + (dx / cw) *
+                                100)); const nt = Math.max(0, Math.min(85, initTop + (dy / ch) * 100));
+                        el.style.left = nl + '%';
+                        el.style.top = nt + '%';
+                        obj.x = nl;
+                        obj.y = nt; }; const up = () => { el.removeEventListener('pointermove', move);
+                        el.removeEventListener('pointerup', up); };
+                    el.addEventListener('pointermove', move);
+                    el.addEventListener('pointerup', up); }); }
+            function addText(text, color) { const t = { id: ++textIdCounter, text, color, x: 25 + Math.random() * 30, y: 40 +
+                        Math.random() * 20 };
+                textsOnPhoto.push(t);
+                renderTexts(); }
+            function renderTexts() { document.querySelectorAll('.text-on-photo').forEach(e => e.remove());
+                textsOnPhoto.forEach(t => { const el = document.createElement('div');
+                    el.className = 'text-on-photo';
+                    el.textContent = t.text;
+                    el.style.left = t.x + '%';
+                    el.style.top = t.y + '%';
+                    el.style.color = t.color;
+                    el.style.fontWeight = '700';
+                    el.style.fontSize = '1.4rem'; const delBtn = document.createElement('span');
+                    delBtn.className = 'delete-sticker';
+                    delBtn.textContent = '✕';
+                    delBtn.addEventListener('click', (e) => { e.stopPropagation();
+                        textsOnPhoto = textsOnPhoto.filter(tx => tx.id !== t.id);
+                        renderTexts(); });
+                    el.appendChild(delBtn);
+                    makeDraggable(el, t);
+                    document.getElementById('camera-container').appendChild(el); }); }
+            const filterPresets = [
+                { name: 'Tự nhiên', filter: 'none' }, { name: 'Leica M10', filter: 'contrast(1.1) saturate(0.9) brightness(1.05)' },
+                { name: 'Canon 5D', filter: 'saturate(1.2) brightness(1.08) contrast(1.02)' },
+                { name: 'Fuji Classic', filter: 'sepia(0.2) contrast(1.05) brightness(0.95)' },
+            ];
+            function buildFilterGrid() { const grid = $('#filter-grid');
+                grid.innerHTML = '';
+                filterPresets.forEach(f => { const div = document.createElement('div');
+                    div.className = 'grid-item';
+                    div.textContent = f.name;
+                    div.style.fontSize = '0.7rem';
+                    div.style.fontWeight = '600'; if (currentFilter === f.filter) div.classList.add('selected');
+                    div.addEventListener('click', () => { $$('#filter-grid .grid-item').forEach(d => d.classList.remove(
+                            'selected'));
+                        div.classList.add('selected');
+                        currentFilter = f.filter;
+                        closeAllPanels(); });
+                    grid.appendChild(div); }); }
+
+            // ==================== EVENT LISTENERS ====================
+            btnCapture.addEventListener('click', startPhotoCapture);
+            btnBeauty.addEventListener('click', toggleBeauty);
+            $('#btn-toggle-fx').addEventListener('click', toggleEffects);
+            $('#btn-flip-camera').addEventListener('click', flipCamera);
+            $('#btn-frame-select').addEventListener('click', () => openPanel('#frame-panel'));
+            $('#btn-history').addEventListener('click', () => { closeAllPanels();
+                loadHistory();
+                $('#history-panel').classList.add('open');
+                overlayBackdrop.classList.add('show'); });
+            $('#btn-close-history').addEventListener('click', () => { $('#history-panel').classList.remove('open');
+                overlayBackdrop.classList.remove('show'); });
+            $('#btn-backgrounds').addEventListener('click', () => openPanel('#bg-panel'));
+            $('#btn-stickers').addEventListener('click', () => openPanel('#sticker-panel'));
+            $('#btn-text').addEventListener('click', () => openPanel('#text-panel'));
+            $('#btn-filters').addEventListener('click', () => openPanel('#filter-panel'));
+            $('#btn-add-text').addEventListener('click', () => { const text = $('#text-input').value.trim(); const color = $(
+                    '#text-color').value; if (text) { addText(text, color);
+                    $('#text-input').value = ''; } });
+            $('#btn-clear-text').addEventListener('click', () => { textsOnPhoto = [];
+                renderTexts();
+                showToast('🗑️ Đã xoá chữ'); });
+            $('#btn-reset-filter').addEventListener('click', () => { currentFilter = 'none';
+                $$('#filter-grid .grid-item').forEach(d => d.classList.remove('selected')); });
+            $('#custom-bg-input').addEventListener('change', e => { const file = e.target.files[0]; if (!file) return; const
+                    reader = new FileReader();
+                reader.onload = ev => { selectedBg = ev.target.result;
+                    closeAllPanels(); };
+                reader.readAsDataURL(file); });
+            $('#btn-save-download').addEventListener('click', saveAndDownload);
+            $('#btn-retake').addEventListener('click', retakeSession);
+            $('#btn-close-result').addEventListener('click', hideResult);
+            resultModal.addEventListener('click', e => { if (e.target === resultModal) hideResult(); });
+            document.addEventListener('keydown', e => { if (e.key === ' ' && !isCapturing && document.activeElement ===
+                    document.body) { e.preventDefault();
+                    btnCapture.click(); } if (e.key === 'Escape') { hideResult();
+                    closeAllPanels(); } });
+            window.addEventListener('beforeunload', stopCamera);
+
+            // Khởi tạo
+            initCamera();
+            buildFrameGrid();
+            buildBgGrid();
+            buildStickerGrid();
+            buildFilterGrid();
             beautyIndicator.classList.add('active');
-            selectedFrame = frameTemplates[0];
-            if($$('.frame-thumb')[0]) $$('.frame-thumb')[0].classList.add('selected');
-            $('#capture-panel').classList.add('open');
+            selectedFrame = frameTemplates[0]; // Mặc định chọn khung đầu tiên
+            if ($$('.frame-thumb')[0]) $$('.frame-thumb')[0].classList.add('selected');
             showToast('🎀 Góc Kỷ Niệm sẵn sàng!');
         })();
     </script>
